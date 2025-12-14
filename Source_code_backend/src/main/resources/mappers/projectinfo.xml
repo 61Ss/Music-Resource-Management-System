@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 配置Mabatis映射文件 -->
+<mapper namespace="com.dao.ProjectinfoDAO">
+    <resultMap type="com.entity.Projectinfo" id="projectinfoMap">
+        <id property="projectinfoid" column="projectinfoid"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="keyword_table" property="keyword_table" jdbcType="INTEGER"/>
+        <result column="iscooled" property="iscooled" jdbcType="INTEGER"/>
+        <result column="projectinfoname" property="projectinfoname" jdbcType="LONGVARCHAR"/>
+        <result column="image" property="image" jdbcType="LONGVARCHAR"/>
+        <result column="remark" property="remark" jdbcType="LONGVARCHAR"/>
+        <result column="createdate" property="createdate" jdbcType="LONGVARCHAR"/>
+        <result column="projectinfo_typeid" property="projectinfo_typeid"/>
+
+        <result column="projectinfo_files" property="projectinfo_files"/>
+        <result column="membersid" property="membersid"/>
+        <result column="projectinfo_0" property="projectinfo_0"/>
+        <result column="projectinfo_istop" property="projectinfo_istop"/>
+        <result column="projectinfo_isflv" property="projectinfo_isflv"/>
+        <result column="projectinfo_hits" property="projectinfo_hits"/>
+        <result column="projectinfo_artist" property="projectinfo_artist"/>
+        <result column="projectinfo_album" property="projectinfo_album"/>
+        <result column="projectinfo_3" property="projectinfo_3"/>
+        <result column="projectinfo_4" property="projectinfo_4"/>
+        <result column="projectinfo_5" property="projectinfo_5"/>
+        <result column="projectinfo_6" property="projectinfo_6"/>
+
+
+        <result property="projectinfo_typename" column="projectinfo_typename"/>
+    </resultMap>
+    <!-- 插入语句 DAO通过id调用此配置 -->
+    <insert id="insert" parameterType="projectinfo">
+        insert into projectinfo ( projectinfoid, projectinfo_typeid, status, keyword_table,
+                                  iscooled, projectinfoname, image,
+                                  remark, createdate
+                                , projectinfo_files
+                                , membersid
+                                , projectinfo_0
+                                , projectinfo_istop
+                                , projectinfo_isflv
+                                , projectinfo_hits
+                                , projectinfo_artist
+                                , projectinfo_album
+                                , projectinfo_3
+                                , projectinfo_4
+                                , projectinfo_5
+                                , projectinfo_6)
+        values ( #{projectinfoid,jdbcType=INTEGER}, #{projectinfo_typeid}, #{status,jdbcType=INTEGER},
+                 #{keyword_table},
+                 #{iscooled,jdbcType=INTEGER}, #{projectinfoname,jdbcType=LONGVARCHAR}, #{image,jdbcType=LONGVARCHAR},
+                 #{remark,jdbcType=LONGVARCHAR}, #{createdate,jdbcType=LONGVARCHAR}
+               , #{projectinfo_files}, #{membersid}, #{projectinfo_0}, #{projectinfo_istop}, #{projectinfo_isflv},
+                 #{projectinfo_hits}
+               , #{projectinfo_artist}
+               , #{projectinfo_album}
+               , #{projectinfo_3}
+               , #{projectinfo_4}
+               , #{projectinfo_5}
+               , #{projectinfo_6})
+    </insert>
+    <!-- 更新语句 DAO通过id调用此配置 -->
+    <update id="update" parameterType="projectinfo">
+        update projectinfo
+        set projectinfo_typeid = #{projectinfo_typeid},
+            status             = #{status,jdbcType=INTEGER},
+            keyword_table      = #{keyword_table},
+            iscooled           = #{iscooled,jdbcType=INTEGER},
+            projectinfoname    = #{projectinfoname,jdbcType=LONGVARCHAR},
+            image              = #{image,jdbcType=LONGVARCHAR},
+            remark             = #{remark,jdbcType=LONGVARCHAR},
+            createdate         = #{createdate,jdbcType=LONGVARCHAR},
+
+
+            projectinfo_files  = #{projectinfo_files},
+            membersid          = #{membersid},
+            projectinfo_0       = #{projectinfo_0},
+            projectinfo_istop      = #{projectinfo_istop},
+            projectinfo_isflv      = #{projectinfo_isflv},
+            projectinfo_hits     = #{projectinfo_hits},
+            projectinfo_artist    = #{projectinfo_artist},
+            projectinfo_album    = #{projectinfo_album},
+            projectinfo_3    = #{projectinfo_3},
+            projectinfo_4    = #{projectinfo_4},
+            projectinfo_5    = #{projectinfo_5},
+            projectinfo_6      = #{projectinfo_6}
+
+        where projectinfoid = #{projectinfoid}
+    </update>
+    <!-- 按主键删除 DAO通过id调用此配置 -->
+    <delete id="delete" parameterType="String">
+        delete
+        from projectinfo
+        where projectinfoid = #{projectinfoid}
+    </delete>
+    <!-- 查询全部信息 DAO通过id调用此配置 -->
+    <select id="getAll" parameterType="map" resultMap="projectinfoMap">
+        select
+        projectinfo.*,
+
+
+        projectinfo_type.projectinfo_typename as projectinfo_typename,members.username
+        from projectinfo
+        left join members on members.membersid=projectinfo.membersid
+
+        left join projectinfo_type on projectinfo.projectinfo_typeid=projectinfo_type.projectinfo_typeid
+
+        where 1=1
+        <if test="membersid != null and membersid != ''">
+            and projectinfo.membersid =#{membersid}
+        </if>
+        <if test="projectinfo_album != null and projectinfo_album != ''">
+            and projectinfo.projectinfo_album like CONCAT('%',#{projectinfo_album},'%')
+        </if>
+        <if test="projectinfo_istop != null and projectinfo_istop != ''">
+            and projectinfo.projectinfo_istop like CONCAT('%',#{projectinfo_istop},'%')
+        </if>
+        <if test="projectinfo_isflv != null and projectinfo_isflv != ''">
+            and projectinfo.projectinfo_isflv like CONCAT('%',#{projectinfo_isflv},'%')
+        </if>
+        <if test="projectinfo_5 != null and projectinfo_5 != ''">
+            and projectinfo.projectinfo_5 like CONCAT('%',#{projectinfo_5},'%')
+        </if>
+        <if test="projectinfo_6 != null and projectinfo_6 != ''">
+            and projectinfo.projectinfo_6 like CONCAT('%',#{projectinfo_6},'%')
+        </if>
+        <if test="keyword != null and keyword != ''">
+            and
+            (
+            projectinfoname like CONCAT('%',#{keyword},'%') or
+            keyword_table like CONCAT('%',#{keyword},'%') or
+            remark like CONCAT('%',#{keyword},'%')
+            )
+        </if>
+        <if test="status != null and status != ''  or 0 == status">
+            and
+            projectinfo.status =#{status}
+        </if>
+        <if test="iscooled != null and iscooled != ''  or 0 == iscooled">
+            and
+            projectinfo.iscooled =#{iscooled}
+        </if>
+        <if test="projectinfo_typeid != null and projectinfo_typeid != ''  or 0 == projectinfo_typeid">
+            and
+            projectinfo.projectinfo_typeid =#{projectinfo_typeid}
+        </if>
+        <if test="keyword_table != null and keyword_table != ''   ">
+            and
+            find_in_set( #{keyword_table}, replace(projectinfo.keyword_table,'#',',' ) )
+
+        </if>
+        /*分词去数据库查询*/
+        <if test="posts_keyword_list != null and posts_keyword_list.size > 0">
+            and
+
+            <foreach collection="posts_keyword_list" item="item" index="index" separator="OR">
+                `remark` LIKE CONCAT('%',#{item},'%')
+            </foreach>
+
+        </if>
+
+
+        order by projectinfo.projectinfoid desc
+
+        <if test="(start != null and start != '') or start==0 ">
+            <if test=" limit != null and limit != ''">
+                limit #{start},#{limit}
+            </if>
+        </if>
+    </select>
+
+    <!-- 统计 获取 总数    用于分页-->
+    <select id="getRowSize" parameterType="map" resultType="int" useCache="false">
+        SELECT count(1)
+        FROM projectinfo
+        left join members on members.membersid=projectinfo.membersid
+
+        left join projectinfo_type on projectinfo.projectinfo_typeid=projectinfo_type.projectinfo_typeid
+
+        where 1=1
+        <if test="status != null and status != ''  or 0 == status">
+            and
+            projectinfo.status =#{status}
+        </if>
+        <if test="membersid != null and membersid != ''">
+            and projectinfo.membersid =#{membersid}
+        </if>
+        <if test="projectinfo_album != null and projectinfo_album != ''">
+            and projectinfo.projectinfo_album like CONCAT('%',#{projectinfo_album},'%')
+        </if>
+        <if test="projectinfo_istop != null and projectinfo_istop != ''">
+            and projectinfo.projectinfo_istop like CONCAT('%',#{projectinfo_istop},'%')
+        </if>
+        <if test="projectinfo_isflv != null and projectinfo_isflv != ''">
+            and projectinfo.projectinfo_isflv like CONCAT('%',#{projectinfo_isflv},'%')
+        </if>
+        <if test="projectinfo_5 != null and projectinfo_5 != ''">
+            and projectinfo.projectinfo_5 like CONCAT('%',#{projectinfo_5},'%')
+        </if>
+        <if test="projectinfo_6 != null and projectinfo_6 != ''">
+            and projectinfo.projectinfo_6 like CONCAT('%',#{projectinfo_6},'%')
+        </if>
+
+        <if test="iscooled != null and iscooled != ''  or 0 == iscooled">
+            and
+            projectinfo.iscooled =#{iscooled}
+        </if>
+        <if test="projectinfo_typeid != null and projectinfo_typeid != ''  or 0 == projectinfo_typeid">
+            and
+            projectinfo.projectinfo_typeid =#{projectinfo_typeid}
+        </if>
+        <if test="keyword_table != null and keyword_table != ''   ">
+            and
+            find_in_set( #{keyword_table}, replace(projectinfo.keyword_table,'#',',' ) )
+
+        </if>
+        <if test="keyword != null and keyword != ''">
+            and
+            (
+            projectinfoname like CONCAT('%',#{keyword},'%') or
+            keyword_table like CONCAT('%',#{keyword},'%') or
+            remark like CONCAT('%',#{keyword},'%')
+            )
+        </if>
+        /*分词去数据库查询*/
+        <if test="posts_keyword_list != null and posts_keyword_list.size > 0">
+            and
+
+            <foreach collection="posts_keyword_list" item="item" index="index" separator="OR">
+                `remark` LIKE CONCAT('%',#{item},'%')
+            </foreach>
+
+        </if>
+
+    </select>
+    
+    <!--获取轮播-->
+    <select id="getFlv" resultMap="projectinfoMap">
+        select projectinfo.*, projectinfo_type.projectinfo_typename
+        from projectinfo
+
+                 left join projectinfo_type on projectinfo.projectinfo_typeid = projectinfo_type.projectinfo_typeid
+        where 1 = 1
+          and projectinfo_isflv = 'Yes'
+        order by projectinfoid desc
+        limit 10
+    </select>
+
+    <!--获取置顶-->
+    <select id="getTop" resultMap="projectinfoMap">
+        select projectinfo.*, projectinfo_type.projectinfo_typename
+        from projectinfo
+
+                 left join projectinfo_type on projectinfo.projectinfo_typeid = projectinfo_type.projectinfo_typeid
+        where 1 = 1
+          and projectinfo_istop = 'Yes'
+        order by projectinfoid desc
+        limit 10
+    </select>
+
+    <!-- 按主键查询 DAO通过id调用此配置 -->
+    <select id="getById" parameterType="String" resultMap="projectinfoMap">
+        select projectinfo.*,
+
+
+               members.username
+        from projectinfo
+
+
+                 left join members on members.membersid = projectinfo.membersid
+
+                 left join projectinfo_type on projectinfo.projectinfo_typeid = projectinfo_type.projectinfo_typeid
+
+
+        where projectinfo.projectinfoid = #{projectinfoid}
+    </select>
+
+    <select id="getByProjectinfo_type" parameterType="String"
+            resultMap="projectinfoMap">
+        select projectinfo.*, projectinfo_type.projectinfo_typename
+        from projectinfo,
+             projectinfo_type
+        where projectinfo.projectinfo_typeid = projectinfo_type.projectinfo_typeid
+          and projectinfo.projectinfo_typeid = #{projectinfo_typeid}
+          and status = 0
+        order by projectinfoid
+                desc
+        limit 12
+    </select>
+
+    <!-- 按条件精确查询 DAO通过id调用此配置 -->
+    <select id="getByCond" parameterType="projectinfo" resultMap="projectinfoMap">
+        select projectinfo.*
+        from projectinfo
+        where 1 = 1
+        order by projectinfoid desc
+
+    </select>
+    <!-- 按条件模糊查询 DAO通过id调用此配置 -->
+    <select id="getByLike" parameterType="projectinfo" resultMap="projectinfoMap">
+        select projectinfo.*
+        from projectinfo
+        where 1 = 1
+        order by projectinfoid desc
+    </select>
+
+
+</mapper>

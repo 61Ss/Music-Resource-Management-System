@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 配置Mabatis映射文件 -->
+<mapper namespace="com.dao.MembersDAO">
+    <resultMap type="com.entity.Members" id="membersMap">
+        <id property="membersid" column="membersid"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="realname" column="realname"/>
+        <result property="sex" column="sex"/>
+        <result property="birthday" column="birthday"/>
+        <result property="contact" column="contact"/>
+        <result property="image" column="image"/>
+        <result property="regdate" column="regdate"/>
+        <result property="address" column="address"/>
+        <result property="iscooled" column="iscooled"/>
+    </resultMap>
+    <!-- 插入语句 DAO通过id调用此配置 -->
+    <insert id="insert" parameterType="members">
+        insert into members(username, password, realname, sex, birthday, contact, image,
+                            regdate, college, major, address, iscooled,
+                            `qq`, `idcard`, `email`, `pwdback_code`, `grades1`, `grades2`, `grades3`, `grades4`, `grades5`,
+                            `grades6`)
+        values (#{username}, #{password}, #{realname}, #{sex}, #{birthday}, #{contact}, #{image},
+                #{regdate}, #{college}, #{major}, #{address}, 0
+                   , #{qq}, #{idcard}, #{email}, #{pwdback_code}, #{grades1}, #{grades2}, #{grades3}, #{grades4}, #{grades5},
+                #{grades6})
+    </insert>
+    <!-- 更新语句 DAO通过id调用此配置 -->
+    <update id="update" parameterType="members">
+        update members
+        set username=#{username},
+            password=#{password},
+            realname=#{realname},
+            sex=#{sex},
+            birthday=#{birthday},
+            contact=#{contact},
+            image=#{image},
+            college=#{college},
+            major=#{major},
+            address=#{address},
+            regdate=#{regdate},
+            iscooled=#{iscooled},
+            qq=#{qq},
+            idcard=#{idcard},
+            email=#{email},
+            pwdback_code=#{pwdback_code},
+            grades1=#{grades1},
+            grades2=#{grades2},
+            grades3=#{grades3},
+            grades4=#{grades4},
+            grades5=#{grades5},
+            grades6=#{grades6}
+
+
+        where membersid = #{membersid}
+    </update>
+
+    <!-- 按主键删除 DAO通过id调用此配置 -->
+    <delete id="delete" parameterType="String">
+        delete
+        from members
+        where membersid = #{membersid}
+    </delete>
+    <!-- 查询全部信息 DAO通过id调用此配置  -->
+    <select id="getAll" parameterType="map" resultMap="membersMap">
+        select * from members
+        where 1=1
+        <if test="keyword != null and keyword != ''">
+            and
+            (
+            members.username like CONCAT('%',#{keyword},'%') or
+            members.realname like CONCAT('%',#{keyword},'%')
+
+            )
+        </if>
+        <if test="email != null and '' != email">
+            and members.email = #{email}
+        </if>
+
+        order by membersid desc
+        <if test="(start != null and start != '') or start==0 ">
+            <if test=" limit != null and limit != ''">
+                limit #{start},#{limit}
+            </if>
+        </if>
+
+    </select>
+
+    <!-- 统计 获取 总数    用于分页-->
+    <select id="getRowSize" parameterType="map" resultType="int">
+        select count(1) from members
+        where 1=1
+        <if test="email != null and '' != email">
+            and members.email = #{email}
+        </if>
+        <if test="keyword != null and keyword != ''">
+            and
+            (
+            members.username like CONCAT('%',#{keyword},'%') or
+            members.realname like CONCAT('%',#{keyword},'%')
+
+            )
+        </if>
+
+
+    </select>
+    <!-- 按主键查询 DAO通过id调用此配置  -->
+    <select id="getById" parameterType="String" resultMap="membersMap">
+        select members.*
+        from members
+        where membersid = #{membersid}
+        order by membersid desc
+    </select>
+    <!-- 按条件精确查询 DAO通过id调用此配置  -->
+    <select id="getByCond" parameterType="members" resultMap="membersMap">
+        select members.* from members where 1=1
+        <if test="username != null and '' != username">
+            and members.username = #{username}
+        </if>
+        <if test="password != null and '' != password">
+            and members.password = #{password}
+        </if>
+        <if test="realname != null and '' != realname">
+            and members.realname = #{realname}
+        </if>
+        <if test="sex != null and '' != sex">
+            and members.sex = #{sex}
+        </if>
+        <if test="email != null and '' != email">
+            and members.email = #{email}
+        </if>
+        <if test="birthday != null and '' != birthday">
+            and members.birthday = #{birthday}
+        </if>
+        <if test="contact != null and '' != contact">
+            and members.contact = #{contact}
+        </if>
+        <if test="image != null and '' != image">
+            and members.image = #{image}
+        </if>
+        <if test="regdate != null and '' != regdate">
+            and members.regdate = #{regdate}
+        </if>
+    </select>
+    <!-- 按条件模糊查询 DAO通过id调用此配置  -->
+    <select id="getByLike" parameterType="members" resultMap="membersMap">
+        select members.* from members where 1=1
+        <if test="username != null and '' != username">
+            and members.username like CONCAT('%', CONCAT(#{username}, '%'))
+        </if>
+        <if test="password != null and '' != password">
+            and members.password like CONCAT('%', CONCAT(#{password}, '%'))
+        </if>
+        <if test="realname != null and '' != realname">
+            and members.realname like CONCAT('%', CONCAT(#{realname}, '%'))
+        </if>
+        <if test="email != null and '' != email">
+            and members.email = #{email}
+        </if>  <if test="sex != null and '' != sex">
+            and members.sex like CONCAT('%', CONCAT(#{sex}, '%'))
+        </if>
+        <if test="birthday != null and '' != birthday">
+            and members.birthday like CONCAT('%', CONCAT(#{birthday}, '%'))
+        </if>
+        <if test="contact != null and '' != contact">
+            and members.contact like CONCAT('%', CONCAT(#{contact}, '%'))
+        </if>
+        <if test="image != null and '' != image">
+            and members.image like CONCAT('%', CONCAT(#{image}, '%'))
+        </if>
+        <if test="regdate != null and '' != regdate">
+            and members.regdate like CONCAT('%', CONCAT(#{regdate}, '%'))
+        </if>
+    </select>
+
+
+
+</mapper>

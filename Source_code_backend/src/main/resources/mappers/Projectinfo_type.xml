@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 配置Mabatis映射文件 -->
+<mapper namespace="com.dao.Projectinfo_typeDAO">
+    <resultMap type="com.entity.Projectinfo_type" id="projectinfo_typeMap">
+        <id property="projectinfo_typeid" column="projectinfo_typeid"/>
+        <result property="projectinfo_typename" column="projectinfo_typename"/>
+    </resultMap>
+    <!-- 插入语句 DAO通过id调用此配置 -->
+    <insert id="insert" parameterType="projectinfo_type">
+        insert into projectinfo_type(projectinfo_typename)
+        values (#{projectinfo_typename})
+    </insert>
+    <!-- 更新语句 DAO通过id调用此配置 -->
+    <update id="update" parameterType="projectinfo_type">
+        update projectinfo_type
+        set projectinfo_typename=#{projectinfo_typename}
+        where projectinfo_typeid = #{projectinfo_typeid}
+    </update>
+    <!-- 按主键删除 DAO通过id调用此配置 -->
+    <delete id="delete" parameterType="String">
+        delete
+        from projectinfo_type
+        where projectinfo_typeid = #{projectinfo_typeid}
+    </delete>
+    <!-- 查询全部信息 DAO通过id调用此配置 -->
+    <select id="getAll" parameterType="map" resultMap="projectinfo_typeMap">
+        select * from projectinfo_type
+        where 1=1
+        <if test="keyword != null and keyword != ''">
+            and
+            (
+            projectinfo_typename like CONCAT('%',#{keyword},'%')
+
+            )
+        </if>
+        <if test="name != null and name != ''">
+            and
+            (
+            projectinfo_typename =#{name}
+
+            )
+        </if>
+        order by projectinfo_typeid desc
+        <if test="(start != null and start != '') or start==0 ">
+            <if test=" limit != null and limit != ''">
+                limit #{start},#{limit}
+            </if>
+        </if>
+
+    </select>
+
+
+    <!-- 统计 获取 总数    用于分页-->
+
+    <select id="getRowSize" parameterType="map" resultType="int">
+        select count(1) from projectinfo_type
+        where 1=1
+        <if test="name != null and name != ''">
+            and
+            (
+            projectinfo_typename =#{name}
+
+            )
+        </if>
+        <if test="keyword != null and keyword != ''">
+            and
+            (
+            projectinfo_typename like CONCAT('%',#{keyword},'%')
+
+            )
+        </if>
+
+
+    </select>
+    <!-- 按主键查询 DAO通过id调用此配置 -->
+    <select id="getById" parameterType="String" resultMap="projectinfo_typeMap">
+        select projectinfo_type.*
+        from projectinfo_type
+        where projectinfo_typeid = #{projectinfo_typeid}
+        order by projectinfo_typeid
+                desc
+    </select>
+    <!-- 按条件精确查询 DAO通过id调用此配置 -->
+    <select id="getByCond" parameterType="projectinfo_type" resultMap="projectinfo_typeMap">
+        select projectinfo_type.* from projectinfo_type where 1=1
+        <if test="projectinfo_typename != null and '' != projectinfo_typename">
+            and projectinfo_type.projectinfo_typename = #{projectinfo_typename}
+        </if>
+    </select>
+    <!-- 按条件模糊查询 DAO通过id调用此配置 -->
+    <select id="getByLike" parameterType="projectinfo_type" resultMap="projectinfo_typeMap">
+        select projectinfo_type.* from projectinfo_type where 1=1
+        <if test="projectinfo_typename != null and '' != projectinfo_typename">
+            and projectinfo_type.projectinfo_typename like CONCAT('%', CONCAT(#{projectinfo_typename}, '%'))
+        </if>
+    </select>
+</mapper>

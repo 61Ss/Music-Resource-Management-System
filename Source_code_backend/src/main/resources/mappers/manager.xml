@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 配置Mabatis映射文件 -->
+<mapper namespace="com.dao.ManagerDAO">
+    <resultMap type="com.entity.Manager" id="managerMap">
+        <id property="managerid" column="managerid"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="realname" column="realname"/>
+        <result property="contact" column="contact"/>
+    </resultMap>
+    <!-- 插入语句 DAO通过id调用此配置 -->
+    <insert id="insert" parameterType="manager">
+        insert into manager(username, password, realname, contact)
+        values (#{username}, #{password}, #{realname},
+                #{contact})
+    </insert>
+    <!-- 更新语句 DAO通过id调用此配置 -->
+    <update id="update" parameterType="manager">
+        update manager
+        set username=#{username},
+            password=#{password},
+            realname=#{realname},
+            contact=#{contact}
+        where managerid = #{managerid}
+    </update>
+    <!-- 按主键删除 DAO通过id调用此配置 -->
+    <delete id="delete" parameterType="String">
+        delete
+        from manager
+        where managerid = #{managerid}
+    </delete>
+    <!-- 查询全部信息 DAO通过id调用此配置 -->
+    <select id="getAll" parameterType="map" resultMap="managerMap">
+        select * from manager
+        where 1=1
+        <if test="keyword != null and keyword != ''">
+            and
+            (
+            manager.username like CONCAT('%',#{keyword},'%') or
+            manager.realname like CONCAT('%',#{keyword},'%') or
+            manager.contact like CONCAT('%',#{keyword},'%')
+            )
+        </if>
+
+        order by managerid desc
+        <if test="(start != null and start != '') or start==0 ">
+            <if test=" limit != null and limit != ''">
+                limit #{start},#{limit}
+            </if>
+        </if>
+    </select>
+
+    <!-- 统计 获取 总数    用于分页-->
+    <select id="getRowSize" parameterType="map" resultType="int" useCache="false">
+        SELECT count(1)
+        FROM manager
+
+        where 1=1
+        <if test="keyword != null and keyword != ''">
+            and
+            (
+            manager.username like CONCAT('%',#{keyword},'%') or
+            manager.realname like CONCAT('%',#{keyword},'%') or
+            manager.contact like CONCAT('%',#{keyword},'%')
+            )
+        </if>
+
+    </select>
+
+
+    <!-- 按主键查询 DAO通过id调用此配置 -->
+    <select id="getById" parameterType="String" resultMap="managerMap">
+        select manager.*
+        from manager
+        where managerid = #{managerid}
+        order by managerid desc
+    </select>
+
+
+    <!-- 按条件精确查询 DAO通过id调用此配置 -->
+    <select id="getByCond" parameterType="manager" resultMap="managerMap">
+        select manager.* from manager where 1=1
+        <if test="username != null and '' != username">
+            and manager.username = #{username}
+        </if>
+        <if test="password != null and '' != password">
+            and manager.password = #{password}
+        </if>
+        <if test="realname != null and '' != realname">
+            and manager.realname = #{realname}
+        </if>
+        <if test="contact != null and '' != contact">
+            and manager.contact = #{contact}
+        </if>
+    </select>
+    <!-- 按条件模糊查询 DAO通过id调用此配置 -->
+    <select id="getByLike" parameterType="manager" resultMap="managerMap">
+        select manager.* from manager where 1=1
+        <if test="username != null and '' != username">
+            and manager.username like CONCAT('%', CONCAT(#{username}, '%'))
+        </if>
+        <if test="password != null and '' != password">
+            and manager.password like CONCAT('%', CONCAT(#{password}, '%'))
+        </if>
+        <if test="realname != null and '' != realname">
+            and manager.realname like CONCAT('%', CONCAT(#{realname}, '%'))
+        </if>
+        <if test="contact != null and '' != contact">
+            and manager.contact like CONCAT('%', CONCAT(#{contact}, '%'))
+        </if>
+    </select>
+</mapper>
