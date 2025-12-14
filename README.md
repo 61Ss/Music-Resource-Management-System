@@ -21,10 +21,6 @@ A full-stack **Music Resource Management System** project with a separated **bac
 - [Configuration](#configuration)
 - [Database](#database)
 - [Build & Deployment](#build--deployment)
-- [Troubleshooting](#troubleshooting)
-- [Contributing](#contributing)
-- [License](#license)
-
 ---
 
 ## Project Overview
