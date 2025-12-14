@@ -5,9 +5,6 @@ A full-stack **Music Resource Management System** project with a separated **bac
 - **Backend:** `Source_code_backend/`
 - **Frontend:** `Source_code_frontend/`
 
-> Repository languages shown by GitHub include JavaScript, Vue, Java, CSS, HTML, and SCSS.  
-> (You can refine the stack details below after you confirm the exact backend framework / frontend build tool.)  
-
 ---
 
 ## Table of Contents
@@ -31,7 +28,6 @@ This project is designed to manage music-related resources in a structured way (
 - A frontend web application to provide UI pages and interactions
 - (Optional) A database for persistence (if your backend uses one)
 
-> If you want this README to be 100% accurate (e.g., exact API routes, database schema, default accounts), add a short “Project Features” list or screenshots and I’ll tailor it precisely.
 
 ---
 
@@ -91,7 +87,6 @@ mvn spring-boot:run
 ./gradlew bootRun
 ```
 
-> ✅ If you are not using Spring Boot, remove the `spring-boot:run` / `bootRun` commands and replace them with the correct run instructions.
 
 ---
 
@@ -121,7 +116,6 @@ npm run dev
 npm run build
 ```
 
-> If your frontend uses `serve`/`start` instead of `dev`, update the scripts above accordingly.
 
 ---
 
@@ -166,8 +160,6 @@ If your backend requires a database:
 2. Import any provided SQL initialization script (if your backend folder includes one)
 3. Update backend configuration to point to your local DB
 4. Start backend and verify DB connectivity
-
-> If you tell me your DB name + the SQL filename (if any), I can write an exact “Database Setup” section with copy-paste commands.
 
 ---
 
